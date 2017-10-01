@@ -2,12 +2,14 @@
 namespace common\models\operation;
 
 use common\models\account\Account;
+use common\models\user\User;
 use yii\db\ActiveRecord;
 
 /**
  * Operation model
  *
  * @property integer $id
+ * @property integer $accounted_at
  * @property integer $id_user_created
  * @property integer $id_account_from
  * @property integer $id_account_to
@@ -41,5 +43,10 @@ class Operation extends ActiveRecord
     public function getAccountTo()
     {
         return $this->hasOne(Account::className(), ['id' => 'id_account_to']);
+    }
+
+    public function getUserCreated()
+    {
+        return $this->hasOne(User::className(), ['id' => 'id_user_created']);
     }
 }

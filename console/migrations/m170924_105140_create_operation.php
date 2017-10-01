@@ -8,7 +8,7 @@ class m170924_105140_create_operation extends Migration
     {
         $this->createTable('{{operation}}', [
             'id' => $this->primaryKey(),
-            'date_created' => $this->integer()->notNull(),
+            'accounted_at' => 'timestamp with time zone NOT NULL DEFAULT NOW()',
             'id_user_created' => $this->integer()->notNull(),
             'id_account_from' => $this->integer()->notNull(),
             'id_account_to' => $this->integer()->notNull(),

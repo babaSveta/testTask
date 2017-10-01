@@ -5,6 +5,7 @@ use common\models\user\User;
 use common\models\user\UserForm;
 use common\services\user\UserService;
 use Yii;
+use yii\data\Pagination;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -18,31 +19,32 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-//    public function behaviors()
-//    {
-//        return [
-//            'access' => [
-//                'class' => AccessControl::className(),
-//                'rules' => [
-//                    [
-//                        'actions' => ['login', 'error'],
-//                        'allow' => true,
-//                    ],
-//                    [
-//                        'actions' => ['logout', 'index'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ],
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//                    'logout' => ['post'],
-//                ],
-//            ],
-//        ];
-//    }
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['logout', 'index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -57,33 +59,27 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Список пользователей.
      *
      * @return string
      */
     public function actionIndex()
     {
         $modelForm = new UserForm();
-        $modelForm->setScenario('update');
 
-        if (Yii::$app->request->post() && $modelForm->load(Yii::$app->request->post())) {
-            if ($modelForm->validate()) {
-                $userService = new UserService(new User());
-
-                $userService->edit($modelForm);
-            }
-        }
-
-        $users = User::find()->all();
+        $query = User::find();
+        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 5]);
+        $users = $query->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render('index', [
             'users' => $users,
             'modelForm' => $modelForm,
+            'pages' => $pages
         ]);
     }
 
     /**
-     * Login action.
+     * Авторизация
      *
      * @return string
      */
@@ -105,7 +101,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Logout action.
+     * Выход
      *
      * @return string
      */

@@ -4,11 +4,35 @@ namespace backend\controllers;
 use common\models\user\User;
 use common\models\user\UserForm;
 use common\services\user\UserService;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 
 
 class UserController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'edit'],
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -21,6 +45,9 @@ class UserController extends Controller
         ];
     }
 
+    /**
+     * Создание пользователя
+     */
     public function actionCreate()
     {
         $modelForm = new UserForm();
@@ -40,14 +67,18 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Редактирование пользователя
+     *
+     * @param $id
+     */
     public function actionEdit($id)
     {
-        $modelForm = new UserForm();
-        $modelForm->setScenario('update');
-
         $model = User::findOne($id);
 
+        $modelForm = new UserForm();
         $modelForm->setAttributes($model->getAttributes());
+        $modelForm->setScenario(UserForm::SCENARIO_UPDATE);
 
         if (\Yii::$app->request->post() && $modelForm->load(\Yii::$app->request->post())) {
             if ($modelForm->validate()) {

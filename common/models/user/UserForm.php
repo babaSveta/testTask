@@ -5,6 +5,8 @@ use yii\base\Model;
 
 class UserForm extends Model
 {
+    const SCENARIO_UPDATE = 'update';
+
     public $username;
     public $email;
     public $password;
@@ -29,7 +31,7 @@ class UserForm extends Model
     {
         return array_merge(parent::scenarios(), [
             'default' => ['email', 'password', 'username'],
-            'update' => ['email', 'username', 'password', 'id_type_user'],
+            'update' => ['email', 'username', 'id_type_user'],
         ]);
     }
 }

@@ -1,55 +1,55 @@
-Yii 2 Advanced Project Template
-===============================
+Установка:
+1. git clone https://github.com/babaSveta/testTask.git
+2. настраиваем nginx:
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+////////////////////****СОДЕРЖИМОЕ****////////////////////
+server {
+    charset utf-8;
+    client_max_body_size 128M;
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+    listen 80; ## listen for ipv4
+    #listen [::]:80 default_server ipv6only=on; ## listen for ipv6
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
+    server_name test.dev;
+    root        /home/xzibit260995/SERVER/test.dev/;
+    index       index.php;
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+    location /out/front {
+        alias  /home/xzibit260995/SERVER/test.dev/frontend/web;
+        rewrite  ^(/out/front)/$ $1 permanent;
+        try_files  $uri /frontend/web/index.php?$args;
+    }
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/yii2-app-advanced/v/stable.png)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://poser.pugx.org/yiisoft/yii2-app-advanced/downloads.png)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Build Status](https://travis-ci.org/yiisoft/yii2-app-advanced.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-advanced)
 
-DIRECTORY STRUCTURE
--------------------
+    location ~ \.php$ {
 
-```
-common
-    config/              contains shared configurations
-    mail/                contains view files for e-mails
-    models/              contains model classes used in both backend and frontend
-    tests/               contains tests for common classes    
-console
-    config/              contains console configurations
-    controllers/         contains console controllers (commands)
-    migrations/          contains database migrations
-    models/              contains console-specific model classes
-    runtime/             contains files generated during runtime
-backend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains backend configurations
-    controllers/         contains Web controller classes
-    models/              contains backend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for backend application    
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-frontend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains frontend configurations
-    controllers/         contains Web controller classes
-    models/              contains frontend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for frontend application
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-    widgets/             contains frontend widgets
-vendor/                  contains dependent 3rd-party packages
-environments/            contains environment-based overrides
-```
+         fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+
+        #fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+
+        proxy_buffer_size          128k;
+        proxy_buffers              4 256k;
+        proxy_busy_buffers_size    256k;
+
+        #try_files  $uri =404;
+
+    }
+}
+////////////////****КОНЕЦ СОДЕРЖИМОГО****////////////////
+
+3. создаём базу данных test
+4. подключаемся к ней и через php yii migrate, накатываем изменения
+
+
+
+На сайте изначально присутствует одни пользователь, администратор с большим количеством денег:
+Логин: admin@mail.ru
+Пароль: 123456
+
+backend: http://test.dev/backend/web/index.php?r=site%2Flogin
+frontend: http://test.dev/frontend/web/
+
+

@@ -24,7 +24,8 @@ class OperationController extends \yii\web\Controller
                 'rules' => [
                     [
                         'allow' => false,
-                        'verbs' => ['POST']
+                        'verbs' => ['POST'],
+                        'roles' => ['?'],
                     ],
                     [
                         'allow' => true,
@@ -35,7 +36,9 @@ class OperationController extends \yii\web\Controller
         ];
     }
 
-    // список отправленных операций
+    /**
+     * Список операций отправления
+     */
     public function actionListSend()
     {
         $listSendOperations = Operation::findAll(['id_account_from' => Yii::$app->user->identity->account->id]);
@@ -45,7 +48,9 @@ class OperationController extends \yii\web\Controller
         ]);
     }
 
-    // список принятых операций
+    /**
+     * Список операций получения
+     */
     public function actionListAccept()
     {
         $listAcceptOperations = Operation::findAll(['id_account_to' => Yii::$app->user->identity->account->id]);
@@ -55,7 +60,7 @@ class OperationController extends \yii\web\Controller
         ]);
     }
 
-    // Список всех операций
+    // Список всех операций пользователя
     public function actionListAll()
     {
         $listAllOperations = Operation::find()->where([
@@ -69,7 +74,9 @@ class OperationController extends \yii\web\Controller
         ]);
     }
 
-    // Отправление денег
+    /**
+     * Отправление денег
+     */
     public function actionSendingMoney()
     {
         $modelForm = new SendingMoneyForm();

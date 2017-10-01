@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Migration;
+use common\models\user\TypeUser;
 
 class m170924_102202_create_type_user extends Migration
 {
@@ -10,8 +11,8 @@ class m170924_102202_create_type_user extends Migration
             'id' => $this->string(255)->unique()
         ]);
 
-        $this->insert('{{type_user}}', ['id' => 'admin']);
-        $this->insert('{{type_user}}', ['id' => 'user']);
+        $this->insert('{{type_user}}', ['id' => TypeUser::CONST_ADMIN]);
+        $this->insert('{{type_user}}', ['id' => TypeUser::CONST_USER]);
     }
 
     public function safeDown()

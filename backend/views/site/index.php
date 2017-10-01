@@ -6,11 +6,10 @@ use yii\bootstrap\Modal;
 
 $this->title = 'Список пользователей';
 ?>
-
+<h2>Список пользователей</h2>
 <table class="table">
     <thead>
     <tr>
-        <th>#</th>
         <th>id</th>
         <th>Username</th>
         <th>Email</th>
@@ -18,25 +17,32 @@ $this->title = 'Список пользователей';
         <th>Тип пользователя</th>
         <th>Количество денег</th>
         <th>Действия</th>
+        <th>История операций</th>
     </tr>
     </thead>
     <tbody>
-    <?php for($i = 0; $i < count($users); $i++) { ?>
+    <?php foreach ($users as $user) { ?>
         <tr>
-        <tr>
-            <th scope="row"><?= $i+1 ?></th>
-            <td><?= $users[$i]->id ?></td>
-            <td><?= $users[$i]->username ?></td>
-            <td><?= $users[$i]->email ?></td>
-            <td><?= Yii::$app->formatter->asDate($users[$i]->created_at) ?></td>
-            <td><?= $users[$i]->id_type_user ?></td>
-            <td><?= $users[$i]->account->amount ?> р.</td>
+            <td><?= $user->id ?></td>
+            <td><?= $user->username ?></td>
+            <td><?= $user->email ?></td>
+            <td><?= Yii::$app->formatter->asDate($user->created_at) ?></td>
+            <td><?= $user->id_type_user ?></td>
+            <td><?= $user->account->amount ?> р.</td>
             <td>
-                <?php echo Html::a(Html::button('Редактиовать', ['class' => 'btn btn-success']), 'index.php?r=user%2Fedit&id=' . $users[$i]->id)?>
+                <?php echo Html::a(Html::button('Редак.', ['class' => 'btn btn-success']), 'index.php?r=user%2Fedit&id=' . $user->id)?>
+            </td>
+            <td>
+                <?php echo Html::a(Html::button('Посм.', ['class' => 'btn btn-success']), 'index.php?r=operation%2Fall-operations-user&idUser=' . $user->id)?>
             </td>
         </tr>
     <?php } ?>
     </tbody>
-
-
 </table>
+
+<div class="text-right">
+<?= \yii\widgets\LinkPager::widget([
+    'pagination' => $pages,
+
+]); ?>
+</div>

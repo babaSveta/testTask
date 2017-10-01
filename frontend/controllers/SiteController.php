@@ -68,7 +68,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Главная страница
      *
      * @return mixed
      */
@@ -78,7 +78,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Logs in a user.
+     * Авторизация
      *
      * @return mixed
      */
@@ -99,7 +99,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Logs out the current user.
+     * Выход
      *
      * @return mixed
      */
@@ -136,7 +136,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Resets password.
+     * Сброс пароля
      *
      * @param string $token
      * @return mixed
@@ -161,7 +161,9 @@ class SiteController extends Controller
         ]);
     }
 
-    // страница регистрации пользователя
+    /**
+     * Регистрация пользователя
+     */
     public function actionSignup()
     {
         $modelForm = new UserForm();
