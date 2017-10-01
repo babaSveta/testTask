@@ -1,2 +1,0 @@
-# testTask
-Тестовое задание Freematiq
