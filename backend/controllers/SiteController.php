@@ -1,6 +1,9 @@
 <?php
 namespace backend\controllers;
 
+use common\models\user\User;
+use common\models\user\UserForm;
+use common\services\user\UserService;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -15,31 +18,31 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login', 'error'],
-                        'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
+//    public function behaviors()
+//    {
+//        return [
+//            'access' => [
+//                'class' => AccessControl::className(),
+//                'rules' => [
+//                    [
+//                        'actions' => ['login', 'error'],
+//                        'allow' => true,
+//                    ],
+//                    [
+//                        'actions' => ['logout', 'index'],
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//            ],
+//            'verbs' => [
+//                'class' => VerbFilter::className(),
+//                'actions' => [
+//                    'logout' => ['post'],
+//                ],
+//            ],
+//        ];
+//    }
 
     /**
      * @inheritdoc
@@ -60,7 +63,23 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $modelForm = new UserForm();
+        $modelForm->setScenario('update');
+
+        if (Yii::$app->request->post() && $modelForm->load(Yii::$app->request->post())) {
+            if ($modelForm->validate()) {
+                $userService = new UserService(new User());
+
+                $userService->edit($modelForm);
+            }
+        }
+
+        $users = User::find()->all();
+
+        return $this->render('index', [
+            'users' => $users,
+            'modelForm' => $modelForm,
+        ]);
     }
 
     /**
@@ -75,7 +94,8 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+        if ($model->load(Yii::$app->request->post()) && $model->login('backend')) {
             return $this->goBack();
         } else {
             return $this->render('login', [

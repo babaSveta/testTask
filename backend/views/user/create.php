@@ -7,7 +7,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Регистрация';
+$this->title = 'Создание пользователя';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">
@@ -17,15 +17,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-                <?= $form->field($modelForm, 'username')->textInput(['autofocus' => true]) ?>
+            <?= $form->field($modelForm, 'username')->textInput(['autofocus' => true]) ?>
 
-                <?= $form->field($modelForm, 'email') ?>
+            <?= $form->field($modelForm, 'email') ?>
 
-                <?= $form->field($modelForm, 'password')->passwordInput() ?>
+            <?= $form->field($modelForm, 'password')->passwordInput() ?>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Регистрация', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
-                </div>
+            <div class="form-group">
+                <?= Html::submitButton('Создать пользователя', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+            </div>
 
             <?php ActiveForm::end(); ?>
         </div>
